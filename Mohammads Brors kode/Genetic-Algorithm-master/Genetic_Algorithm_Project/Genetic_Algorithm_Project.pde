@@ -5,6 +5,9 @@ int CombAmount = 50;
 boolean TestCombiCheck;
 //ArrayList for itemList
 Items[] itemList = new Items[24];
+int[][] validItemCombis = new int[50][24];
+//Items[] validItemCombis = new Items[0];
+
 
 //Name of the item objects
 Items Map;
@@ -84,17 +87,36 @@ void setup() {
   itemList[23] = Tent;
   TestCombiCheck = false;
 
+  int correctCombinations = 0;
   //For Loop that runs multiple Combinations according to the CombAmount set
-  for (int i=0; i <CombAmount; i++) {
+  for (int i = 0; i < CombAmount; i++) {
     Combinations TestCombi = new Combinations();
     if (TestCombi.getWeight() < 5001) { 
       TestCombi.printCombi();
       println("Value:" + " " + TestCombi.getValue());
       println("Weight:" + " " +  TestCombi.getWeight());
       TestCombiCheck = true;
+
+      //Stores the correct combinations into a new array with the name validItemCombis.
+      for (int x = 0; x < 24; x++) {
+        validItemCombis[correctCombinations][x] = TestCombi.combination[x];
+        //print(validItemCombis[correctCombinations][TestCombi.combination[x]]);
+      }
+      println();
+      correctCombinations++;
     }
+
     if (TestCombi.getWeight() > 5000) {
       TestCombiCheck = false;
+    }
+  }
+
+  //Prints all combinations inside the array validItemCombis
+  for (int i = 0; i < correctCombinations; i++) {
+    println();
+    for (int x = 0; x < 24; x++) {
+      print(validItemCombis[i][x]);
+      //println();
     }
   }
 }
