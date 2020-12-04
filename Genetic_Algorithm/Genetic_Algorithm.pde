@@ -1,10 +1,10 @@
 Item item;
 Population[] pop;
 
+int itemAmount = 50;  //sets the amount of items we have to play around with
 
 void setup() {
-  item = new Item();
-  pop = new Population();
+  pop = new Population[50];
   
   size(500, 500);
   background(255);
