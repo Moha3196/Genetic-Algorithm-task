@@ -1,9 +1,8 @@
 class Combinations {
-  int[] combination = new int[24];  
-  
+  int[] combination = new int[24];
 
   //Loop to generate Yes(1) and No(0) numbers for each item in the itemList
-  Combinations() {
+  Combinations( ) {
     for (int i=0; i <24; i++) {
       combination[i] = (int)(random(2));
     }
@@ -38,11 +37,4 @@ class Combinations {
     }
     println();
   }
-  
-  //void printCorrectCombi() {
-  //  for (int i=0; i <24; i++) {
-  //    print(combination[i]);
-  //  }
-  //  println();
-  //}
 }
