@@ -1,9 +1,0 @@
-class Population {
-  
-  
-  Population() {
-    
-  }
-  
-  
-}
