@@ -1,13 +1,14 @@
 //Mohammad and Niklas DDU. Genetic Algorithm Project
 
 //Amount of Combinations to be done
-int CombAmount = 50;
+int CombAmount = 200;
 int correctCombinations = 0;
 boolean TestCombiCheck;
 
 //Array for itemList
 Items[] itemList = new Items[24];
 int[][] validItemCombis = new int[50][24];
+int[][] matingPool = new int[50][24];
 float[] fitness = new float[50];
 //Items[] validItemCombis = new Items[0];
 
@@ -42,103 +43,107 @@ void setup() {
   //Constructing the items with Name, Weight and Value
   Map = new Items("Map", 90, 150);
   itemList[0] = Map;
-  
+
   Compas = new Items("Compas", 130, 35);
   itemList[1] = Compas;
-  
+
   Water =  new Items("Water", 1530, 200);
   itemList[2] = Water;
-  
+
   Sandwich = new Items("Sandwich", 500, 160);
   itemList[3] = Sandwich;
-  
+
   Sugar = new Items("Sugar", 150, 60);
   itemList[4] = Sugar;
-  
+
   Cannedfood = new Items("Cannedfood", 680, 45);
   itemList[5] = Cannedfood;
-  
+
   Banana = new Items("Banana", 270, 60);
   itemList[6] = Banana;
-  
+
   Apple = new Items("Apple", 390, 40);
   itemList[7] = Apple;
-  
+
   Cheese = new Items("Cheese", 230, 30);
   itemList[8] = Cheese;
-  
+
   Beer = new Items("Beer", 520, 10);
   itemList[9] = Beer;
-  
+
   Sunscreen = new Items("Sunscreen", 110, 70);
   itemList[10] = Sunscreen;
-  
+
   Camera = new Items("Camera", 320, 30);
   itemList[11] = Camera;
-  
+
   TShirt = new Items("TShirt", 240, 15);
   itemList[12] = TShirt;
-  
+
   Pants = new Items("Pants", 480, 10);
   itemList[13] = Pants;
-  
+
   Parasol = new Items("Parasol", 730, 40);
   itemList[14] = Parasol;
-  
+
   WaterproofPants = new Items("WaterproofPants", 420, 70);
   itemList[15] = WaterproofPants;
-  
+
   WaterproofOuterwear = new Items("WaterproofOuterwear", 430, 75);
   itemList[16] = WaterproofOuterwear;
-  
+
   Wallet = new Items("Wallet", 220, 80);
   itemList[17] = Wallet;
-  
+
   Sunglasses = new Items("Sunglasses", 70, 20);
   itemList[18] = Sunglasses;
-  
+
   Towel = new Items("Towel", 180, 12);
   itemList[19] = Towel;
-  
+
   Socks = new Items("Socks", 40, 50);
   itemList[20] = Socks;
-  
+
   Book = new Items("Book", 300, 10);
   itemList[21] = Book;
-  
+
   Notebook = new Items("Notebook", 900, 1);
   itemList[22] = Notebook;
-  
+
   Tent = new Items("Tent", 2000, 150);
   itemList[23] = Tent;
-  
+
   TestCombiCheck = false;
 
 
   //For Loop that runs multiple Combinations according to the CombAmount set
+
   for (int i = 0; i < CombAmount; i++) {
     Combinations TestCombi = new Combinations(0);
-    
-    //Prints all the correct combinations where weight is below the limit
-    if (TestCombi.getWeight() < 5001) { 
-      TestCombi.printCombi();
-      println("Value: " + TestCombi.getValue());
-      println("Weight: " +  TestCombi.getWeight());
-      TestCombiCheck = true;
 
-      //Stores the correct combinations into a new array with the name validItemCombis.
-      for (int x = 0; x < 24; x++) {
-        validItemCombis[correctCombinations][x] = TestCombi.combination[x];
+    //Prints all the correct combinations where weight is below the limit
+    if (correctCombinations < 24) {
+      if (TestCombi.getWeight() < 5001) { 
+        TestCombi.printCombi();
+        println("Value: " + TestCombi.getValue());
+        println("Weight: " +  TestCombi.getWeight());
+        TestCombiCheck = true;
+
+        //Stores the correct combinations into a new array with the name validItemCombis.
+        for (int x = 0; x < 24; x++) {
+          validItemCombis[correctCombinations][x] = TestCombi.combination[x];
+        }
+        println();  //used throughout the code to create a little space between elements in the console
+        correctCombinations++;
       }
-      println();  //used throughout the code to create a little space between elements in the console
-      correctCombinations++;
     }
-    
+
     //Doesnt print anything if the weight over the limit
     if (TestCombi.getWeight() > 5000) {
       TestCombiCheck = false;
     }
   }
+
 
   //Prints all combinations inside the array validItemCombis
   //Also prints the Value, Weight, Fitness and the Fitness ratio
@@ -151,10 +156,13 @@ void setup() {
     println("Value: " + getValue(i));
     println("Weight: " + getWeight(i));
     println("Fitness is: " + getFitness(i));
-    println(getFitness(i)/getTotalFitness(correctCombinations)*100 +" %");
+    println(getFitness(i)/getTotalFitness(correctCombinations));
     println();
   }
   println("Total Fitness: " + getTotalFitness(correctCombinations));
+
+  //println(chooseParent());
+  //println(correctCombinations);
 }
 
 
@@ -201,3 +209,56 @@ float getTotalFitness(int combinations) {
   }
   return totalFitness;
 }
+
+//Returns the scaled fitness
+float getScaledFitness(int currentCombination, int totalCombinations) {
+  float totalFitness = getTotalFitness(totalCombinations);
+  float fitness = getFitness(currentCombination);
+  float scaledFitness = fitness/totalFitness;
+  return scaledFitness;
+}
+
+//Returns a chosen parent
+int chooseParent() {
+  int finalIndex = 0;
+  float randomNumber = (float)random(0, 1);
+  float fitnessScales = 0;
+  for (int i = 0; i < correctCombinations; i++) {    
+    fitnessScales += getScaledFitness(i, correctCombinations);
+    if (randomNumber <= fitnessScales) {
+      finalIndex = i;
+      break;
+    }
+  }
+  return finalIndex;
+}
+
+//int crossover(){
+  
+    //int parent1 = chooseParent();
+    //int parent2 = chooseParent();
+  
+  //for (int x = 0; x < 24; x++) {
+    //  print(validItemCombis[parent1][x]);
+    //  //println();
+    //}
+
+    //for (int x = 0; x < 24; x++) {
+    //  print(validItemCombis[parent2][x]);
+    //  //println();
+    //}
+
+    //for (int x = 0; x < 12; x++) {
+    //  print(validItemCombis[parent1][x]);
+    //  //println();
+    //}
+    //for (int x = 12; x < 24; x++) {
+    //  print(validItemCombis[parent2][x]);
+    //  //println();
+    //}
+    
+    //println();
+    //println();
+  
+  
+//}
