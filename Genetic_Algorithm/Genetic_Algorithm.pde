@@ -3,12 +3,15 @@
 //Amount of Combinations to be done
 int CombAmount = 200;
 int correctCombinations = 0;
+int babiesProduced = 0;
+int currentGeneration = 1;
 boolean TestCombiCheck;
 
 //Array for itemList
 Items[] itemList = new Items[24];
 int[][] validItemCombis = new int[50][24];
 int[][] matingPool = new int[50][24];
+int[][] testingBabies = new int[50][24];
 float[] fitness = new float[50];
 //Items[] validItemCombis = new Items[0];
 
@@ -124,16 +127,16 @@ void setup() {
     //Prints all the correct combinations where weight is below the limit
     if (correctCombinations < 24) {
       if (TestCombi.getWeight() < 5001) { 
-        TestCombi.printCombi();
-        println("Value: " + TestCombi.getValue());
-        println("Weight: " +  TestCombi.getWeight());
+        //TestCombi.printCombi();
+        //println("Value: " + TestCombi.getValue());
+        //println("Weight: " +  TestCombi.getWeight());
         TestCombiCheck = true;
 
         //Stores the correct combinations into a new array with the name validItemCombis.
         for (int x = 0; x < 24; x++) {
           validItemCombis[correctCombinations][x] = TestCombi.combination[x];
         }
-        println();  //used throughout the code to create a little space between elements in the console
+        //println();  //used throughout the code to create a little space between elements in the console
         correctCombinations++;
       }
     }
@@ -153,14 +156,73 @@ void setup() {
       //println();
     }
     println();
-    println("Value: " + getValue(i));
-    println("Weight: " + getWeight(i));
-    println("Fitness is: " + getFitness(i));
-    println(getFitness(i)/getTotalFitness(correctCombinations));
+    println("Value: " + getValue(i, validItemCombis));
+    println("Weight: " + getWeight(i, validItemCombis));
+    println("Fitness is: " + getFitness(i, validItemCombis));
+    println(getFitness(i, validItemCombis)/getTotalFitness(correctCombinations, validItemCombis));
     println();
   }
-  println("Total Fitness: " + getTotalFitness(correctCombinations));
-
+  println();
+  println();
+  println();
+  println();
+  println();
+  println();
+  println();
+  println();
+  println();
+  println();
+  
+  //Prints the Generation number and the total fitness
+  println("Current Generation: " + currentGeneration);
+  println("The total fitness for Current Generation: " + getTotalFitness(24,validItemCombis));
+  println();
+  crossover(validItemCombis, matingPool);
+  println("Current Generation: " + currentGeneration);
+  println("The total fitness for Current Generation: " + getTotalFitness(24,matingPool));
+  println();
+  crossover(matingPool, matingPool);
+  println("Current Generation: " + currentGeneration);
+  println("The total fitness for Current Generation: " + getTotalFitness(24,matingPool));
+  println();
+  crossover(matingPool, matingPool);
+  println("Current Generation: " + currentGeneration);
+  println("The total fitness for Current Generation: " + getTotalFitness(24,matingPool));
+  println();
+  crossover(matingPool, matingPool);
+  println("Current Generation: " + currentGeneration);
+  println("The total fitness for Current Generation: " + getTotalFitness(24,matingPool));
+  println();
+  crossover(matingPool, matingPool);
+  println("Current Generation: " + currentGeneration);
+  println("The total fitness for Current Generation: " + getTotalFitness(24,matingPool));
+  println();
+  crossover(matingPool, matingPool);
+  println("Current Generation: " + currentGeneration);
+  println("The total fitness for Current Generation: " + getTotalFitness(24,matingPool));
+  println();
+  crossover(matingPool, matingPool);
+  println("Current Generation: " + currentGeneration);
+  println("The total fitness for Current Generation: " + getTotalFitness(24,matingPool));
+  
+  println();
+  
+  //Prints all combinations inside the array matingPool
+  //Also prints the Value, Weight, Fitness and the Fitness ratio
+  for (int i = 0; i < correctCombinations; i++) {
+    for (int x = 0; x < 24; x++) {
+      print(matingPool[i][x]);
+      //println();
+    }
+    println();
+    println("Value: " + getValue(i, matingPool));
+    println("Weight: " + getWeight(i, matingPool));
+    println("Fitness is: " + getFitness(i, matingPool));
+    println(getFitness(i, matingPool)/getTotalFitness(correctCombinations, matingPool));
+    println();
+  }  
+  println("Total Fitness: " + getTotalFitness(correctCombinations, validItemCombis));
+  println("Current Generation: " + currentGeneration);
   //println(chooseParent());
   //println(correctCombinations);
 }
@@ -172,59 +234,59 @@ void draw() {
 }
 
 //Returns the total value of an itemList
-int getValue(int combinations) {
+int getValue(int combinations, int[][] chosenArray) {
   int value = 0;
   for (int i = 0; i < 24; i++) {
     Items item = itemList[i];
     int v = item.value;
-    value = value + v * validItemCombis[combinations][i];
+    value = value + v * chosenArray[combinations][i];
   }
   return value;
 }
 
 //Returns the total weight of an itemList
-int getWeight(int combinations) {
+int getWeight(int combinations, int[][] chosenArray) {
   int weight = 0;
   for (int i = 0; i < 24; i++) {
     Items item = itemList[i];
     int w = item.weight;
-    weight = weight + w * validItemCombis[combinations][i];
+    weight = weight + w * chosenArray[combinations][i];
   }
   return weight;
 }
 
 //Returns the fitness
-float getFitness(int combinations) {
-  float weight = getWeight(combinations);
-  float value = getValue(combinations);
+float getFitness(int combinations, int[][] chosenArray) {
+  float weight = getWeight(combinations, chosenArray);
+  float value = getValue(combinations, chosenArray);
   float fitness = value/weight;
   return fitness;
 }
 
 //Returns the total fitness
-float getTotalFitness(int combinations) {
+float getTotalFitness(int combinations, int[][] chosenArray) {
   float totalFitness = 0; 
   for (int i = 0; i < combinations; i++) {
-    totalFitness += getFitness(i);
+    totalFitness += getFitness(i, chosenArray);
   }
   return totalFitness;
 }
 
 //Returns the scaled fitness
-float getScaledFitness(int currentCombination, int totalCombinations) {
-  float totalFitness = getTotalFitness(totalCombinations);
-  float fitness = getFitness(currentCombination);
+float getScaledFitness(int currentCombination, int totalCombinations, int[][] chosenArray) {
+  float totalFitness = getTotalFitness(totalCombinations, chosenArray);
+  float fitness = getFitness(currentCombination, chosenArray);
   float scaledFitness = fitness/totalFitness;
   return scaledFitness;
 }
 
 //Returns a chosen parent
-int chooseParent() {
+int chooseParent(int[][] chosenArray) {
   int finalIndex = 0;
   float randomNumber = (float)random(0, 1);
   float fitnessScales = 0;
   for (int i = 0; i < correctCombinations; i++) {    
-    fitnessScales += getScaledFitness(i, correctCombinations);
+    fitnessScales += getScaledFitness(i, correctCombinations, chosenArray);
     if (randomNumber <= fitnessScales) {
       finalIndex = i;
       break;
@@ -233,32 +295,29 @@ int chooseParent() {
   return finalIndex;
 }
 
-//int crossover(){
-  
-    //int parent1 = chooseParent();
-    //int parent2 = chooseParent();
-  
-  //for (int x = 0; x < 24; x++) {
-    //  print(validItemCombis[parent1][x]);
-    //  //println();
-    //}
+//Function that makes crossovers/produces babies for the next generation
+void crossover(int[][] oldGeneration, int[][] newGeneration) {
+  //While loop the keeps producing babies till the number of babies equals 24
+  while (babiesProduced < 24) {
+    for (int x = 0; x < 12; x++) {
+      testingBabies[0][x] = oldGeneration[chooseParent(oldGeneration)][x];
+    }
+    for (int x = 12; x < 24; x++) {
+      testingBabies[0][x] = oldGeneration[chooseParent(oldGeneration)][x];
+    }
 
-    //for (int x = 0; x < 24; x++) {
-    //  print(validItemCombis[parent2][x]);
-    //  //println();
-    //}
+    if (getWeight(0, testingBabies) < 5001) {
+      TestCombiCheck = true;
 
-    //for (int x = 0; x < 12; x++) {
-    //  print(validItemCombis[parent1][x]);
-    //  //println();
-    //}
-    //for (int x = 12; x < 24; x++) {
-    //  print(validItemCombis[parent2][x]);
-    //  //println();
-    //}
-    
-    //println();
-    //println();
-  
-  
-//}
+      for (int x = 0; x < 12; x++) {
+        newGeneration[babiesProduced][x] = testingBabies[chooseParent(testingBabies)][x];
+      }
+      for (int x = 12; x < 24; x++) {
+        newGeneration[babiesProduced][x] = testingBabies[chooseParent(testingBabies)][x];
+      }
+      babiesProduced++;
+    }
+  }
+  currentGeneration++;
+  babiesProduced = 0;
+}
