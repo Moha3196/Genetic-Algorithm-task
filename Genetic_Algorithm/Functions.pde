@@ -45,18 +45,26 @@ float getScaledFitness(int currentCombination, int totalCombinations, int[][] ch
 }
 
 //Returns a chosen parent
-int chooseParent(int[][] chosenArray) {
-  int finalIndex = 0;
-  float randomNumber = (float)random(0, 100);
+int[] chooseParent(int[][] chosenArray) {
+  int[] matingPool = new int[2];
+  int choseParent1 = 0;
+  int choseParent2 = 0;
+  float randomParent1 = (float)random(0, 100);
+  float randomParent2 = (float)random(0, 100);
   float fitnessScales = 0;
   for (int i = 0; i < population; i++) {    
     fitnessScales += getScaledFitness(i, population, chosenArray);
-    if (randomNumber <= fitnessScales) {
-      finalIndex = i;
+    if (randomParent1 <= fitnessScales && choseParent1 == 0) {
+      matingPool[0] = i;
+      choseParent1++;
+    } else if (randomParent2 <= fitnessScales && choseParent2 == 0) {
+      matingPool[1] = i;
+      choseParent2++;
+    } else if (choseParent1 == 1 && choseParent2 == 1) {
       break;
     }
   }
-  return finalIndex;
+  return matingPool;
 }
 
 //Function that mutates the items in bag
@@ -76,12 +84,15 @@ void mutate(int index, int[][] chosenArray) {
 void crossover(int[][] oldGen, int[][] newGen) {
   //While loop the keeps producing babies till the number of babies equals number of population
   while (babiesProduced < population) {
+    int[] matingPool = chooseParent(oldGen);
+    int parent1 = matingPool[0];
+    int parent2 = matingPool[1];
     int randomSplit = (int)random(1, 23);
     for (int x = 0; x < randomSplit; x++) {
-      testingBabies[0][x] = oldGen[chooseParent(oldGen)][x];
+      testingBabies[0][x] = oldGen[parent1][x];
     }
     for (int x = randomSplit; x < 24; x++) {
-      testingBabies[0][x] = oldGen[chooseParent(oldGen)][x];
+      testingBabies[0][x] = oldGen[parent2][x];
     }
     mutate(0, testingBabies);
 

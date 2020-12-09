@@ -4,7 +4,7 @@
 int correctCombinations = 0;
 int babiesProduced = 0;
 int currentGeneration = 1;
-int population = 150;
+int population = 500;
 int generationsCreated = 1000;
 float mutationRate = 0.01;
 boolean TestCombiCheck; 
