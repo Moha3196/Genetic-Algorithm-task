@@ -46,10 +46,10 @@ float getScaledFitness(int currentCombination, int totalCombinations, int[][] ch
 
 //Returns a chosen parent
 int[] chooseParent(int[][] chosenArray) {
-  int chooseParentSize = 16; 
   int[] matingPool = new int[chooseParentSize];
   int[] chooseParent = new int[chooseParentSize];
   float[] randomParent = new float[chooseParentSize];
+  int parentsTotal = 0;
 
   for (int i = 0; i < chooseParentSize; i++) {
     chooseParent[i] = 0;
@@ -63,38 +63,11 @@ int[] chooseParent(int[][] chosenArray) {
       if (randomParent[x] <= fitnessScales && chooseParent[x] == 0) {
         matingPool[x] = i;
         chooseParent[x] = 1;
-      } else if (chooseParent[chooseParentSize - (chooseParentSize - x)] == 1) {
+        parentsTotal++;
+      } else if (parentsTotal == chooseParentSize) {
         break;
       }
     }
-    //if (randomParent1 <= fitnessScales && chooseParent1 == 0) {
-    //  matingPool[0] = i;
-    //  chooseParent1 = 1;
-    //} else if (randomParent2 <= fitnessScales && chooseParent2 == 0) {
-    //  matingPool[1] = i;
-    //  chooseParent2 = 1;
-    //} else if (randomParent3 <= fitnessScales && chooseParent3 == 0) {
-    //  matingPool[2] = i;
-    //  chooseParent3 = 1;
-    //} else if (randomParent4 <= fitnessScales && chooseParent4 == 0) {
-    //  matingPool[3] = i;
-    //  chooseParent4 = 1;
-    //} else if (randomParent5 <= fitnessScales && chooseParent5 == 0) {
-    //  matingPool[4] = i;
-    //  chooseParent5 = 1;
-    //} else if (randomParent6 <= fitnessScales && chooseParent6 == 0) {
-    //  matingPool[5] = i;
-    //  chooseParent6 = 1;
-    //} else if (randomParent7 <= fitnessScales && chooseParent7 == 0) {
-    //  matingPool[6] = i;
-    //  chooseParent7 = 1;
-    //} else if (randomParent8 <= fitnessScales && chooseParent8 == 0) {
-    //  matingPool[7] = i;
-    //  chooseParent8 = 1;
-    //} else if (chooseParent1 == 1 && chooseParent2 == 1 && chooseParent3 == 1 && chooseParent4 == 1 &&
-    //  chooseParent5 == 1 && chooseParent6 == 1 && chooseParent7 == 1 && chooseParent8 == 1) {
-    //  break;
-    //}
   }
   return matingPool;
 }
@@ -116,8 +89,9 @@ void mutate(int index, int[][] chosenArray) {
 void crossover(int[][] oldGen, int[][] newGen) {
   int[][] testingBabies = new int[1][24];
   int[][] tempNewGen = new int[population][24];
-  int[] matingPool = new int[8];
+  int[] matingPool = new int[chooseParentSize];
   int parentChooser = 0;
+
   int parent1 = 0;
   int parent2 = 0;
   //While loop the keeps producing babies till the number of babies equals number of population
@@ -125,19 +99,10 @@ void crossover(int[][] oldGen, int[][] newGen) {
     if (parentChooser == 0) {
       matingPool = chooseParent(oldGen);
     }
-    if (parentChooser == 0) {
-      parent1 = matingPool[0];
-      parent2 = matingPool[1];
-    } else if (parentChooser == 1) {
-      parent1 = matingPool[2];
-      parent2 = matingPool[3];
-    } else if (parentChooser == 2) {
-      parent1 = matingPool[4];
-      parent2 = matingPool[5];
-    } else if (parentChooser == 3) {
-      parent1 = matingPool[6];
-      parent2 = matingPool[7];
-    }
+    
+    parent1 = matingPool[parentChooser];
+    parent2 = matingPool[parentChooser + 1];
+
     int randomSplit = (int)random(1, 23);
 
     for (int x = 0; x < randomSplit; x++) {
@@ -146,17 +111,14 @@ void crossover(int[][] oldGen, int[][] newGen) {
     for (int x = randomSplit; x < 24; x++) {
       testingBabies[0][x] = oldGen[parent2][x];
     }
-    if (parentChooser == 0) {
-      parentChooser = 1;
-    } else if (parentChooser == 1) {
-      parentChooser = 2;
-    } else if (parentChooser == 2) {
-      parentChooser = 3;
-    } else if (parentChooser == 3) {
+
+    if (parentChooser == chooseParentSize - 2) {
       parentChooser = 0;
+    } else {
+      parentChooser += 2;
     }
 
-    //mutate(0, testingBabies);
+    mutate(0, testingBabies);
 
     if (getWeight(0, testingBabies) < 5001) {
       for (int x = 0; x < 24; x++) {
