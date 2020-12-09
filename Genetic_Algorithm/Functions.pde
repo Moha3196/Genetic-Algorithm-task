@@ -20,18 +20,18 @@ int getWeight(int combinations, int[][] chosenArray) {
   return weight;
 }
 
-//Returns the fitness
-float getFitness(int combinations, int[][] chosenArray) {
-  float value = getValue(combinations, chosenArray);
-  float fitness = value;
-  return fitness;
-}
+////Returns the fitness
+//float getFitness(int combinations, int[][] chosenArray) {
+//  float value = getValue(combinations, chosenArray);
+//  float fitness = value;
+//  return fitness;
+//}
 
 //Returns the total fitness
 float getTotalFitness(int combinations, int[][] chosenArray) {
   float totalFitness = 0; 
   for (int i = 0; i < combinations; i++) {
-    totalFitness += getFitness(i, chosenArray);
+    totalFitness += getValue(i, chosenArray);
   }
   return totalFitness;
 }
@@ -39,7 +39,7 @@ float getTotalFitness(int combinations, int[][] chosenArray) {
 //Returns the scaled fitness
 float getScaledFitness(int currentCombination, int totalCombinations, int[][] chosenArray) {
   float totalFitness = getTotalFitness(totalCombinations, chosenArray);
-  float fitness = getFitness(currentCombination, chosenArray);
+  float fitness = getValue(currentCombination, chosenArray);
   float scaledFitness = map(fitness, 0, totalFitness, 0, 100);
   return scaledFitness;
 }
@@ -73,21 +73,21 @@ void mutate(int index, int[][] chosenArray) {
 }
 
 //Function that makes crossovers/produces babies for the next generation
-void crossover(int[][] oldGeneration, int[][] newGeneration) {
+void crossover(int[][] oldGen, int[][] newGen) {
   //While loop the keeps producing babies till the number of babies equals number of population
   while (babiesProduced < population) {
     int randomSplit = (int)random(1, 23);
     for (int x = 0; x < randomSplit; x++) {
-      testingBabies[0][x] = oldGeneration[chooseParent(oldGeneration)][x];
+      testingBabies[0][x] = oldGen[chooseParent(oldGen)][x];
     }
     for (int x = randomSplit; x < 24; x++) {
-      testingBabies[0][x] = oldGeneration[chooseParent(oldGeneration)][x];
+      testingBabies[0][x] = oldGen[chooseParent(oldGen)][x];
     }
     mutate(0, testingBabies);
 
     if (getWeight(0, testingBabies) < 5001) {
       for (int x = 0; x < 24; x++) {
-        newGeneration[babiesProduced][x] = testingBabies[0][x];
+        newGen[babiesProduced][x] = testingBabies[0][x];
       }
       babiesProduced++;
     }
