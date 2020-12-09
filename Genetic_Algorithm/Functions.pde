@@ -118,7 +118,7 @@ void crossover(int[][] oldGen, int[][] newGen) {
       parentChooser += 2;
     }
 
-    mutate(0, testingBabies);
+    //mutate(0, testingBabies);
 
     if (getWeight(0, testingBabies) < 5001) {
       for (int x = 0; x < 24; x++) {

@@ -4,8 +4,8 @@
 int correctCombinations = 0;
 int babiesProduced = 0;
 int currentGeneration = 1;
-int population = 500;
-int chooseParentSize = population; 
+int population = 1000;
+int chooseParentSize = population*4; 
 int generationsCreated = 1000;
 float mutationRate = 0.01;
 boolean TestCombiCheck; 
