@@ -4,7 +4,7 @@
 int correctCombinations = 0;
 int babiesProduced = 0;
 int currentGeneration = 1;
-int population = 500;
+int population = 200;
 int generationsCreated = 1000;
 float mutationRate = 0.01;
 boolean TestCombiCheck; 
@@ -13,7 +13,6 @@ boolean TestCombiCheck;
 Items[] itemList = new Items[24];
 int[][] validItemCombis = new int[population][24];
 int[][] newGeneration = new int[population][24];
-int[][] testingBabies = new int[1][24];
 
 
 //Name of the item objects (there are a lot, and they all have unique values, like their names, so we have to make each one)
@@ -183,6 +182,21 @@ void setup() {
     println("Current Generation: " + currentGeneration);
     println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
     println();
+    
+    //int generationSwitcher = 0;
+    //if (generationSwitcher == 0) {
+    //  crossover(newGeneration, validItemCombis);
+    //  println("Current Generation: " + currentGeneration);
+    //  println("The average fitness for Current Generation: " + getTotalFitness(population, validItemCombis)/population);
+    //  println();
+    //  generationSwitcher = 1;
+    //} else {
+    //  crossover(validItemCombis, newGeneration);
+    //  println("Current Generation: " + currentGeneration);
+    //  println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
+    //  println();
+    //  generationSwitcher = 0;
+    //}
   }
 
   println();
@@ -206,7 +220,7 @@ void setup() {
   //  println("scaledFitness is: " + getScaledFitness(i, population, newGeneration));
   //  println();
   //}  
-  println("Total Fitness: " + getTotalFitness(population, newGeneration));
+  println("Total Fitness: " + getTotalFitness(population, newGeneration)/population);
   println("Current Generation: " + currentGeneration);
   //println(chooseParent());
   //println(correctCombinations);
