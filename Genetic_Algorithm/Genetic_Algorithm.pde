@@ -3,12 +3,12 @@
 //Amount of Combinations to be done
 int correctCombinations, babiesProduced = 0;
 int currentGeneration = 1;
-int population = 500;
+int population = 10;
 int chooseParentSize = population*4; 
 int generationsCreated = 100;
 float mutationRate = 0.01;
 boolean TestCombiCheck, continueRunning = true;
-float zoomX, zoomY, scaledZoom, rectWidth, averageFitness;
+float zoomX, zoomY, scaledAxisNumbers, rectWidth, averageFitness;
 
 //Array for itemList
 Items[] itemList = new Items[24];
@@ -48,7 +48,7 @@ void setup() {
   frameRate(120);
   zoomX = width/generationsCreated;
   zoomY = height/12;
-  scaledZoom = width/generationsCreated;
+  scaledAxisNumbers = width/generationsCreated;
   rectWidth = zoomX;
 
 
@@ -177,6 +177,7 @@ void draw() {
     //  println("scaledFitness is: " + getScaledFitness(i, population, validItemCombis));
     //  println();
     //}
+    
     println();
     println();
     println();
