@@ -5,7 +5,7 @@ int correctCombinations, babiesProduced = 0;
 int currentGeneration = 1;
 int population = 10;
 int chooseParentSize = population*4; 
-int generationsCreated = 100;
+int generationsCreated = 100;  //more than about 200 generations will make it hard to load in the display window (if they even get drawn)
 float mutationRate = 0.01;
 boolean TestCombiCheck, continueRunning = true;
 float zoomX, zoomY, scaledAxisNumbers, rectWidth, averageFitness;
