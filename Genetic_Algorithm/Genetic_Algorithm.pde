@@ -3,15 +3,15 @@
 //Amount of Combinations to be done
 int correctCombinations, babiesProduced = 0;
 int currentGeneration = 1;
-int population = 10;
+int population = 1000;  //choose here the desired population size
 int chooseParentSize = population*4; 
 int generationsCreated = 100;  //more than about 200 generations will make it hard to load in the display window (if they even get drawn)
-float mutationRate = 0.01;
+float mutationRate = 0.01;  //the likelyhood of a mutation happening
 boolean TestCombiCheck, continueRunning = true;
 float zoomX, zoomY, scaledAxisNumbers, rectWidth, averageFitness;
 
 //Array for itemList
-Items[] itemList = new Items[24];
+Items[] itemList = new Items[24];  //we only have 24 different items
 int[][] validItemCombis = new int[population][24];
 int[][] newGeneration = new int[population][24];
 
@@ -46,10 +46,10 @@ void setup() {
   size(500, 500);
   background(255);
   frameRate(120);
-  zoomX = width/generationsCreated;
-  zoomY = height/12;
-  scaledAxisNumbers = width/generationsCreated;
-  rectWidth = zoomX;
+  zoomX = width/generationsCreated;  //scales the zoom-value for the lines in the x-axis (vertical lines)
+  zoomY = height/12;  //we won't be getting fitness-values higher than about 1130, so we divide by 12 to split the y-axis into 12 bits (with 100 between each line)
+  scaledAxisNumbers = width/generationsCreated;  //for adapting the amount of numbers drawn on the x-axis
+  rectWidth = zoomX;  //to make some code less confusing. The rects will now be as wide as each column in the coordinates system
 
 
   //Constructing the items with Name, Weight and Value
@@ -131,8 +131,8 @@ void setup() {
 
 
 void draw() {
-  translate(0, height);
-  frame();
+  translate(0, height);  //regular the coordinates systems start in bottom left, not top left like in Processing
+  frame(); //to draw the coordinates system
 
   if (continueRunning) {
     //for (int i = 0; i < CombAmount; i++) {
@@ -158,7 +158,7 @@ void draw() {
 
       //Doesnt print anything if the weight over the limit
       if (TestCombi.getWeight() > 5000) {
-        TestCombiCheck = false;
+        TestCombiCheck = false;  //basically marks the combination as invalid, because it's weight is above the limit
       }
     }
 
@@ -178,46 +178,43 @@ void draw() {
     //  println();
     //}
     
-    println();
-    println();
-    println();
-    println();
-    println();
+    //println();  //
+    //println();  //
+    //println();  // For some spacing in the console
+    //println();  //
+    //println();  //
 
     //Prints the Generation number and the total fitness
+    
     //for first generation
     averageFitness = getTotalFitness(population, validItemCombis)/population;
     println("Current Generation: " + currentGeneration);
     println("The average fitness for Current Generation: " + averageFitness);
+    
     graphFirst(-averageFitness);
+    
     println();
+    
     
     //for second generation
     crossover(validItemCombis, newGeneration);
     averageFitness = getTotalFitness(population, newGeneration)/population;
     println("Current Generation: " + currentGeneration);
     println("The average fitness for Current Generation: " + averageFitness);
+   
     graphSecond(-averageFitness);
+    
     println();
-
-    int generationSwitcher = 0;
+    
+    
+    //for the third generation and up
     for (int i = 0; i < generationsCreated-2; i++) {
       crossover(newGeneration, newGeneration);
       averageFitness = getTotalFitness(population, newGeneration)/population;
       println("Current Generation: " + currentGeneration);
       println("The average fitness for Current Generation: " + averageFitness);
-      graphRemaining(i*rectWidth + rectWidth*2, -averageFitness);
-
-      //println("Current Generation: " + currentGeneration);
-      //if (generationSwitcher == 0) {
-      //  crossover(newGeneration, validItemCombis);
-      //  generationSwitcher = 1;
-      //  println("The average fitness for Current Generation: " + getTotalFitness(population, validItemCombis)/population);
-      //} else {
-      //  crossover(validItemCombis, newGeneration);
-      //  generationSwitcher = 0;
-      //  println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
-      //}
+     
+      graphRemaining(i*rectWidth + rectWidth*2, -averageFitness);  //we use the for-loop to define where the next rect should be drawn from
 
       println();
     }
@@ -225,25 +222,25 @@ void draw() {
     println();
     println();
 
-    ////Prints all combinations inside the array newGeneration
-    ////Also prints the Value, Weight, Fitness and the Fitness ratio
-    //for (int i = 0; i < 24; i++) {
-    //  for (int x = 0; x < 24; x++) {
-    //    print(newGeneration[i][x]);
-    //    //println();
-    //  }
-    //  println();
-    //  println("Value: " + getValue(i, newGeneration));
-    //  println("Weight: " + getWeight(i, newGeneration));
-    //  println("Fitness is: " + getValue(i, newGeneration));
-    //  println("scaledFitness is: " + getScaledFitness(i, population, newGeneration));
-    //  println();
-    //}  
+  /*
+    //Prints all combinations inside the array newGeneration
+    //Also prints the Value, Weight, Fitness and the Fitness ratio
+    for (int i = 0; i < 24; i++) {
+      for (int x = 0; x < 24; x++) {
+        print(newGeneration[i][x]);
+        //println();
+      }
+      println();
+      println("Value: " + getValue(i, newGeneration));
+      println("Weight: " + getWeight(i, newGeneration));
+      println("Fitness is: " + getValue(i, newGeneration));
+      println("scaledFitness is: " + getScaledFitness(i, population, newGeneration));
+      println();
+    }
+  */
     println("Average Fitness: " + getTotalFitness(population, newGeneration)/population);
     println("Current Generation: " + currentGeneration);
-    //println(chooseParent());
-    //println(correctCombinations);
     
-    continueRunning = false;
+    continueRunning = false;  //we only need to run it once, because we originally made everything in setup anyway
   }
 }

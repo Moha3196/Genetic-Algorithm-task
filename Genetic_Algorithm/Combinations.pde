@@ -8,12 +8,14 @@ class Combinations {
     }
   }
   
+  
   //Loop to generate Yes(1) and No(0) numbers for each item in the itemList
   Combinations(int f) {
     for (int i=0; i <24; i++) {
       combination[i] = (int)(random(2));
     }
   }
+
 
   //Returns the total value of an itemList
   int getValue() {
@@ -26,6 +28,7 @@ class Combinations {
     return value;
   }
 
+
   //Returns the total weight of an itemList
   int getWeight() {
     int weight=0;
@@ -37,7 +40,8 @@ class Combinations {
     return weight;
   }
 
-  //Prints the Combination
+
+  //Prints the Combination - mostly used during production
   void printCombi() {
     for (int i=0; i <24; i++) {
       print(combination[i]);
