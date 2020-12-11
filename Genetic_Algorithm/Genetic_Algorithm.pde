@@ -3,8 +3,9 @@
 //Amount of Combinations to be done
 int correctCombinations, babiesProduced = 0;
 int currentGeneration = 1;
-int population = 10;
-int generationsCreated = 200;
+int population = 500;
+int chooseParentSize = population*4; 
+int generationsCreated = 100;
 float mutationRate = 0.01;
 boolean TestCombiCheck, continueRunning = true;
 float zoomX, zoomY, scaledZoom, rectWidth, averageFitness;
@@ -13,7 +14,6 @@ float zoomX, zoomY, scaledZoom, rectWidth, averageFitness;
 Items[] itemList = new Items[24];
 int[][] validItemCombis = new int[population][24];
 int[][] newGeneration = new int[population][24];
-int[][] testingBabies = new int[1][24];
 
 
 //Name of the item objects (there are a lot, and they all have unique values, like their names, so we have to make each one)
@@ -50,6 +50,7 @@ void setup() {
   zoomY = height/12;
   scaledZoom = width/generationsCreated;
   rectWidth = zoomX;
+
 
   //Constructing the items with Name, Weight and Value
   Map = new Items("Map", 90, 150);
@@ -133,7 +134,6 @@ void draw() {
   translate(0, height);
   frame();
 
-
   if (continueRunning) {
     //for (int i = 0; i < CombAmount; i++) {
     while (correctCombinations < population) {
@@ -190,7 +190,7 @@ void draw() {
     println("The average fitness for Current Generation: " + averageFitness);
     graphFirst(-averageFitness);
     println();
-
+    
     //for second generation
     crossover(validItemCombis, newGeneration);
     averageFitness = getTotalFitness(population, newGeneration)/population;
@@ -199,22 +199,30 @@ void draw() {
     graphSecond(-averageFitness);
     println();
 
-    //for 3. generation and up (that's why there's a for-loop)
+    int generationSwitcher = 0;
     for (int i = 0; i < generationsCreated-2; i++) {
       crossover(newGeneration, newGeneration);
       averageFitness = getTotalFitness(population, newGeneration)/population;
       println("Current Generation: " + currentGeneration);
       println("The average fitness for Current Generation: " + averageFitness);
       graphRemaining(i*rectWidth + rectWidth*2, -averageFitness);
+
+      //println("Current Generation: " + currentGeneration);
+      //if (generationSwitcher == 0) {
+      //  crossover(newGeneration, validItemCombis);
+      //  generationSwitcher = 1;
+      //  println("The average fitness for Current Generation: " + getTotalFitness(population, validItemCombis)/population);
+      //} else {
+      //  crossover(validItemCombis, newGeneration);
+      //  generationSwitcher = 0;
+      //  println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
+      //}
+
       println();
     }
 
     println();
     println();
-    //println();
-    //println();
-    //println();
-    //println();
 
     ////Prints all combinations inside the array newGeneration
     ////Also prints the Value, Weight, Fitness and the Fitness ratio
@@ -230,11 +238,11 @@ void draw() {
     //  println("scaledFitness is: " + getScaledFitness(i, population, newGeneration));
     //  println();
     //}  
-    println("Total Fitness: " + getTotalFitness(population, newGeneration));
+    println("Average Fitness: " + getTotalFitness(population, newGeneration)/population);
     println("Current Generation: " + currentGeneration);
     //println(chooseParent());
     //println(correctCombinations);
-
+    
     continueRunning = false;
   }
 }
