@@ -4,12 +4,14 @@
 int correctCombinations = 0;
 int babiesProduced = 0;
 int currentGeneration = 1;
-int population = 20;
+int population = 10;
 int generationsCreated = 10;
 float mutationRate = 0.01;
 boolean TestCombiCheck;
 boolean continueRunning = true;
-int zoom;
+float zoomX;
+float zoomY;
+float scaledZoom;
 
 //Array for itemList
 Items[] itemList = new Items[24];
@@ -46,8 +48,11 @@ Items Tent;
 
 void setup() {
   size(500, 500);
+  background(255);
   frameRate(120);
-  zoom = width/generationsCreated;
+  zoomX = width/generationsCreated;
+  zoomY = height/12;
+  scaledZoom = width/generationsCreated;
   
   //Constructing the items with Name, Weight and Value
   Map = new Items("Map", 90, 150);
@@ -128,11 +133,10 @@ void setup() {
 
 
 void draw() {
-  background(255);
   translate(0, height);
   frame();
 
-
+  
   if (continueRunning) {
     //for (int i = 0; i < CombAmount; i++) {
     while (correctCombinations < population) {
@@ -186,12 +190,14 @@ void draw() {
     //for first generation
     println("Current Generation: " + currentGeneration);
     println("The average fitness for Current Generation: " + getTotalFitness(population, validItemCombis)/population);
+    graphFirst(-(getTotalFitness(population, validItemCombis)/population));
     println();
 
     //for second generation
     crossover(validItemCombis, newGeneration);
     println("Current Generation: " + currentGeneration);
     println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
+    graphSecond();
     println();
 
     //for 3. generation and up (that's why there's a for-loop)
@@ -199,6 +205,7 @@ void draw() {
       crossover(newGeneration, newGeneration);
       println("Current Generation: " + currentGeneration);
       println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
+      graphRemaining();
       println();
     }
 
