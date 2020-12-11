@@ -99,7 +99,7 @@ void crossover(int[][] oldGen, int[][] newGen) {
     if (parentChooser == 0) {
       matingPool = chooseParent(oldGen);
     }
-    
+
     parent1 = matingPool[parentChooser];
     parent2 = matingPool[parentChooser + 1];
 

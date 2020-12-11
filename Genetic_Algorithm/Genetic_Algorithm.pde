@@ -178,31 +178,28 @@ void setup() {
   println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
   println();
 
+  int generationSwitcher = 0;
   for (int i = 0; i < generationsCreated; i++) {
     crossover(newGeneration, newGeneration);
     println("Current Generation: " + currentGeneration);
     println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
     println();
     
-    //int generationSwitcher = 0;
+    //println("Current Generation: " + currentGeneration);
     //if (generationSwitcher == 0) {
     //  crossover(newGeneration, validItemCombis);
-    //  println("Current Generation: " + currentGeneration);
-    //  println("The average fitness for Current Generation: " + getTotalFitness(population, validItemCombis)/population);
-    //  println();
     //  generationSwitcher = 1;
+    //  println("The average fitness for Current Generation: " + getTotalFitness(population, validItemCombis)/population);
     //} else {
     //  crossover(validItemCombis, newGeneration);
-    //  println("Current Generation: " + currentGeneration);
-    //  println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
-    //  println();
     //  generationSwitcher = 0;
+    //  println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
     //}
+
+
+    println();
   }
 
-  println();
-  println();
-  println();
   println();
   println();
   println();
