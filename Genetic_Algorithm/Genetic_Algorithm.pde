@@ -1,17 +1,13 @@
 //Mohammad and Niklas DDU. Genetic Algorithm Project
 
 //Amount of Combinations to be done
-int correctCombinations = 0;
-int babiesProduced = 0;
+int correctCombinations, babiesProduced = 0;
 int currentGeneration = 1;
 int population = 10;
-int generationsCreated = 10;
+int generationsCreated = 200;
 float mutationRate = 0.01;
-boolean TestCombiCheck;
-boolean continueRunning = true;
-float zoomX;
-float zoomY;
-float scaledZoom;
+boolean TestCombiCheck, continueRunning = true;
+float zoomX, zoomY, scaledZoom, rectWidth, averageFitness;
 
 //Array for itemList
 Items[] itemList = new Items[24];
@@ -53,7 +49,8 @@ void setup() {
   zoomX = width/generationsCreated;
   zoomY = height/12;
   scaledZoom = width/generationsCreated;
-  
+  rectWidth = zoomX;
+
   //Constructing the items with Name, Weight and Value
   Map = new Items("Map", 90, 150);
   itemList[0] = Map;
@@ -136,7 +133,7 @@ void draw() {
   translate(0, height);
   frame();
 
-  
+
   if (continueRunning) {
     //for (int i = 0; i < CombAmount; i++) {
     while (correctCombinations < population) {
@@ -188,24 +185,27 @@ void draw() {
 
     //Prints the Generation number and the total fitness
     //for first generation
+    averageFitness = getTotalFitness(population, validItemCombis)/population;
     println("Current Generation: " + currentGeneration);
-    println("The average fitness for Current Generation: " + getTotalFitness(population, validItemCombis)/population);
-    graphFirst(-(getTotalFitness(population, validItemCombis)/population));
+    println("The average fitness for Current Generation: " + averageFitness);
+    graphFirst(-averageFitness);
     println();
 
     //for second generation
     crossover(validItemCombis, newGeneration);
+    averageFitness = getTotalFitness(population, newGeneration)/population;
     println("Current Generation: " + currentGeneration);
-    println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
-    graphSecond();
+    println("The average fitness for Current Generation: " + averageFitness);
+    graphSecond(-averageFitness);
     println();
 
     //for 3. generation and up (that's why there's a for-loop)
     for (int i = 0; i < generationsCreated-2; i++) {
       crossover(newGeneration, newGeneration);
+      averageFitness = getTotalFitness(population, newGeneration)/population;
       println("Current Generation: " + currentGeneration);
-      println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
-      graphRemaining();
+      println("The average fitness for Current Generation: " + averageFitness);
+      graphRemaining(i*rectWidth + rectWidth*2, -averageFitness);
       println();
     }
 
@@ -234,7 +234,7 @@ void draw() {
     println("Current Generation: " + currentGeneration);
     //println(chooseParent());
     //println(correctCombinations);
-    
+
     continueRunning = false;
   }
 }
