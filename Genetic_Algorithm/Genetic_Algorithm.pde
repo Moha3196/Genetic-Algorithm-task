@@ -1,14 +1,14 @@
 //Mohammad and Niklas DDU. Genetic Algorithm Project
 
 //Amount of Combinations to be done
-int correctCombinations = 0;
-int babiesProduced = 0;
+int correctCombinations, babiesProduced = 0;
 int currentGeneration = 1;
-int population = 1000;
+int population = 500;
 int chooseParentSize = population*4; 
-int generationsCreated = 1000;
+int generationsCreated = 100;
 float mutationRate = 0.01;
-boolean TestCombiCheck; 
+boolean TestCombiCheck, continueRunning = true;
+float zoomX, zoomY, scaledZoom, rectWidth, averageFitness;
 
 //Array for itemList
 Items[] itemList = new Items[24];
@@ -43,8 +43,15 @@ Items Notebook;
 Items Tent;
 
 void setup() {
-  size(100, 100);
+  size(500, 500);
+  background(255);
   frameRate(120);
+  zoomX = width/generationsCreated;
+  zoomY = height/12;
+  scaledZoom = width/generationsCreated;
+  rectWidth = zoomX;
+
+
   //Constructing the items with Name, Weight and Value
   Map = new Items("Map", 90, 150);
   itemList[0] = Map;
@@ -119,114 +126,123 @@ void setup() {
   itemList[23] = Tent;
 
   TestCombiCheck = false;
-
-
-  //for (int i = 0; i < CombAmount; i++) {
-  while (correctCombinations < population) {
-    Combinations TestCombi = new Combinations(0);
-
-    //Prints all the correct combinations where weight is below the limit
-    if (correctCombinations < population) {
-      if (TestCombi.getWeight() < 5001) { 
-        //TestCombi.printCombi();
-        //println("Value: " + TestCombi.getValue());
-        //println("Weight: " +  TestCombi.getWeight());
-        TestCombiCheck = true;
-
-        //Stores the correct combinations into a new array with the name validItemCombis.
-        for (int x = 0; x < 24; x++) {
-          validItemCombis[correctCombinations][x] = TestCombi.combination[x];
-        }
-        //println();  //used throughout the code to create a little space between elements in the console
-        correctCombinations++;
-      }
-    }
-
-    //Doesnt print anything if the weight over the limit
-    if (TestCombi.getWeight() > 5000) {
-      TestCombiCheck = false;
-    }
-  }
-
-
-  ////Prints all combinations inside the array validItemCombis
-  ////Also prints the Value, Weight, Fitness and the Fitness ratio
-  //for (int i = 0; i < 24; i++) {
-  //  for (int x = 0; x < 24; x++) {
-  //    print(validItemCombis[i][x]);
-  //    //println();
-  //  }
-  //  println();
-  //  println("Value: " + getValue(i, validItemCombis));
-  //  println("Weight: " + getWeight(i, validItemCombis));
-  //  println("Fitness is: " + getValue(i, validItemCombis));
-  //  println("scaledFitness is: " + getScaledFitness(i, population, validItemCombis));
-  //  println();
-  //}
-  println();
-  println();
-  println();
-  println();
-  println();
-
-  //Prints the Generation number and the total fitness
-  println("Current Generation: " + currentGeneration);
-  println("The average fitness for Current Generation: " + getTotalFitness(population, validItemCombis)/population);
-  println();
-  crossover(validItemCombis, newGeneration);
-  println("Current Generation: " + currentGeneration);
-  println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
-  println();
-
-  int generationSwitcher = 0;
-  for (int i = 0; i < generationsCreated; i++) {
-    crossover(newGeneration, newGeneration);
-    println("Current Generation: " + currentGeneration);
-    println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
-    println();
-    
-    //println("Current Generation: " + currentGeneration);
-    //if (generationSwitcher == 0) {
-    //  crossover(newGeneration, validItemCombis);
-    //  generationSwitcher = 1;
-    //  println("The average fitness for Current Generation: " + getTotalFitness(population, validItemCombis)/population);
-    //} else {
-    //  crossover(validItemCombis, newGeneration);
-    //  generationSwitcher = 0;
-    //  println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
-    //}
-
-
-    println();
-  }
-
-  println();
-  println();
-  println();
-
-  ////Prints all combinations inside the array newGeneration
-  ////Also prints the Value, Weight, Fitness and the Fitness ratio
-  //for (int i = 0; i < 24; i++) {
-  //  for (int x = 0; x < 24; x++) {
-  //    print(newGeneration[i][x]);
-  //    //println();
-  //  }
-  //  println();
-  //  println("Value: " + getValue(i, newGeneration));
-  //  println("Weight: " + getWeight(i, newGeneration));
-  //  println("Fitness is: " + getValue(i, newGeneration));
-  //  println("scaledFitness is: " + getScaledFitness(i, population, newGeneration));
-  //  println();
-  //}  
-  println("Total Fitness: " + getTotalFitness(population, newGeneration)/population);
-  println("Current Generation: " + currentGeneration);
-  //println(chooseParent());
-  //println(correctCombinations);
 }
 
 
 
 void draw() {
-  background(255);
-  //temporarily blank, because we've not reached the point of making a graph for anything yet
+  translate(0, height);
+  frame();
+
+  if (continueRunning) {
+    //for (int i = 0; i < CombAmount; i++) {
+    while (correctCombinations < population) {
+      Combinations TestCombi = new Combinations(0);
+
+      //Prints all the correct combinations where weight is below the limit
+      if (correctCombinations < population) {
+        if (TestCombi.getWeight() < 5001) { 
+          //TestCombi.printCombi();
+          //println("Value: " + TestCombi.getValue());
+          //println("Weight: " +  TestCombi.getWeight());
+          TestCombiCheck = true;
+
+          //Stores the correct combinations into a new array with the name validItemCombis.
+          for (int x = 0; x < 24; x++) {
+            validItemCombis[correctCombinations][x] = TestCombi.combination[x];
+          }
+          //println();  //used throughout the code to create a little space between elements in the console
+          correctCombinations++;
+        }
+      }
+
+      //Doesnt print anything if the weight over the limit
+      if (TestCombi.getWeight() > 5000) {
+        TestCombiCheck = false;
+      }
+    }
+
+
+    ////Prints all combinations inside the array validItemCombis
+    ////Also prints the Value, Weight, Fitness and the Fitness ratio
+    //for (int i = 0; i < 24; i++) {
+    //  for (int x = 0; x < 24; x++) {
+    //    print(validItemCombis[i][x]);
+    //    //println();
+    //  }
+    //  println();
+    //  println("Value: " + getValue(i, validItemCombis));
+    //  println("Weight: " + getWeight(i, validItemCombis));
+    //  println("Fitness is: " + getValue(i, validItemCombis));
+    //  println("scaledFitness is: " + getScaledFitness(i, population, validItemCombis));
+    //  println();
+    //}
+    println();
+    println();
+    println();
+    println();
+    println();
+
+    //Prints the Generation number and the total fitness
+    //for first generation
+    averageFitness = getTotalFitness(population, validItemCombis)/population;
+    println("Current Generation: " + currentGeneration);
+    println("The average fitness for Current Generation: " + averageFitness);
+    graphFirst(-averageFitness);
+    println();
+    
+    //for second generation
+    crossover(validItemCombis, newGeneration);
+    averageFitness = getTotalFitness(population, newGeneration)/population;
+    println("Current Generation: " + currentGeneration);
+    println("The average fitness for Current Generation: " + averageFitness);
+    graphSecond(-averageFitness);
+    println();
+
+    int generationSwitcher = 0;
+    for (int i = 0; i < generationsCreated-2; i++) {
+      crossover(newGeneration, newGeneration);
+      averageFitness = getTotalFitness(population, newGeneration)/population;
+      println("Current Generation: " + currentGeneration);
+      println("The average fitness for Current Generation: " + averageFitness);
+      graphRemaining(i*rectWidth + rectWidth*2, -averageFitness);
+
+      //println("Current Generation: " + currentGeneration);
+      //if (generationSwitcher == 0) {
+      //  crossover(newGeneration, validItemCombis);
+      //  generationSwitcher = 1;
+      //  println("The average fitness for Current Generation: " + getTotalFitness(population, validItemCombis)/population);
+      //} else {
+      //  crossover(validItemCombis, newGeneration);
+      //  generationSwitcher = 0;
+      //  println("The average fitness for Current Generation: " + getTotalFitness(population, newGeneration)/population);
+      //}
+
+      println();
+    }
+
+    println();
+    println();
+
+    ////Prints all combinations inside the array newGeneration
+    ////Also prints the Value, Weight, Fitness and the Fitness ratio
+    //for (int i = 0; i < 24; i++) {
+    //  for (int x = 0; x < 24; x++) {
+    //    print(newGeneration[i][x]);
+    //    //println();
+    //  }
+    //  println();
+    //  println("Value: " + getValue(i, newGeneration));
+    //  println("Weight: " + getWeight(i, newGeneration));
+    //  println("Fitness is: " + getValue(i, newGeneration));
+    //  println("scaledFitness is: " + getScaledFitness(i, population, newGeneration));
+    //  println();
+    //}  
+    println("Average Fitness: " + getTotalFitness(population, newGeneration)/population);
+    println("Current Generation: " + currentGeneration);
+    //println(chooseParent());
+    //println(correctCombinations);
+    
+    continueRunning = false;
+  }
 }
